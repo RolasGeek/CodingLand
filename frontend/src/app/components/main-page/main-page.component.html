@@ -1,0 +1,10 @@
+
+<div class="container">
+	<div class="row">
+		<div *ngFor="let category of categories" class="col-lg-4">
+			 <a [routerLink]="['category/', category.id]" routerLinkActive="active" class="btn btn-sq-lg btn-primary">
+               <p  class="text-center">{{category.name}}</p><br>
+            </a>
+		</div>
+	</div>
+</div>

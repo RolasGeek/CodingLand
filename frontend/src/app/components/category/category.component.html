@@ -1,0 +1,27 @@
+
+<div>
+	<button class="btn btn-lg btn-outline-primary float-right"
+		(click)="open(undefined)">Create</button>
+	<div class="container">
+		<div class="topic" *ngFor="let topic of topics">
+			<div class="row">
+				<div class="col-md-3 user-data">
+					<p>Inserted By: {{topic.user.userName}}
+					<p>
+					<p>Insert Date : {{topic.insertDate | date:
+						'dd/MM/yyyy-hh:mm'}}
+					<p>
+				</div>
+				<div class="col-md-9 post-data">
+					<a [routerLink]="['topic/', topic.id]" routerLinkActive="active">
+						<p>Name: {{topic.name}}</p>
+						<p>Description: {{topic.description}}</p>
+					</a>
+				</div>
+			</div>
+			<button class="btn" (click)="delete(topic.id)">Delete</button>
+			<button class="btn btn-md btn-outline-primary float-left"
+				(click)="open(topic)">Update</button>
+		</div>
+	</div>
+</div>
