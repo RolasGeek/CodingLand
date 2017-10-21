@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
@@ -21,76 +22,52 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.rolas.studies.dao.categoryDao.CategoryDao;
-import com.rolas.studies.dao.topicDao.TopicDao;
-import com.rolas.studies.dao.userDao.UserDao;
+import com.rolas.studies.dao.category.CategoryDao;
+import com.rolas.studies.dao.topic.TopicDao;
+import com.rolas.studies.dao.user.UserDao;
 import com.rolas.studies.entities.Category;
 import com.rolas.studies.entities.Topic;
 import com.rolas.studies.entities.User;
 import com.rolas.studies.security.Secured;
-import com.rolas.studies.util.ObjectParser;
+import com.rolas.studies.service.topic.TopicService;
+import com.rolas.studies.util.ResponseCreator;
 
 @Path("topic")
 public class TopicsResource {
 
-	@Inject
-	TopicDao topicDao;
-
-	@Inject
-	ObjectParser objectParser;
-
-	@Inject
-	CategoryDao categoryDao;
-
-	@Inject
-	UserDao userDao;
+	@Inject ResponseCreator responseCreator;
+	
+	@Inject TopicService topicService;
 
 	@GET
-	public Response get(@QueryParam("id") Integer id, @QueryParam("categoryId") Integer categoryId) {
-		if (id == null && categoryId == null) { //Get all
-			return Response.ok(objectParser.mapToJson(topicDao.getAll()), MediaType.APPLICATION_JSON).build();
-		} else if (id == null && categoryId != null) {//Get all by category id
-			return Response.ok(objectParser.mapToJson(topicDao.getByCategory(categoryId)), MediaType.APPLICATION_JSON).build();
-		} else {//Get one
-			return Response.ok(objectParser.mapToJson(topicDao.get(id)), MediaType.APPLICATION_JSON)
-					.build();
-		}
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response get(@PathParam("id") Integer id, @QueryParam("categoryId") Integer categoryId) {
+		return responseCreator.ResponseGet(id != 0 ? 
+				topicService.getTopic(id) : topicService.getByCategory(categoryId));
 	}
 
 	@DELETE
+	@Path("/{id}")
 	@Secured
 	@RolesAllowed("ADMIN")
-	public Response delete(@QueryParam("id") Integer id) {
-		if (topicDao.delete(id)) {
-			return Response.ok().build();
-		} else {
-			return Response.status(Status.NOT_FOUND).build();
-		}
+	public Response delete(@PathParam("id") Integer id) {
+		return responseCreator.ResponseDelete(topicService.delete(id));
 	}
 
 	@POST
 	@Secured
 	@PermitAll
-	public Response post(String json, @Context UriInfo uriInfo) {
-		Topic topic = (Topic) objectParser.mapFromJson(json, Topic.class);
-		topic.setInsertDate(new Date());
-		topic.setPostCount(0);
-		Integer id = topicDao.persist(topic);
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-		builder.path(Integer.toString(id));
-		return Response.created(builder.build()).entity(topic).build();
+	public Response post(Topic topic, @Context UriInfo uriInfo) {
+		Topic persisted = topicService.insert(topic);
+		return responseCreator.ResponseCreated(uriInfo, persisted.getId(), persisted);
 	}
 
 	@PUT
 	@Secured
 	@PermitAll
-	public Response update(String json) {
-		Topic receivedTopic = (Topic) objectParser.mapFromJson(json, Topic.class);
-		Topic fromDatabase = (Topic) topicDao.get(receivedTopic.getId());
-		fromDatabase.setDescription(receivedTopic.getDescription());
-		fromDatabase.setName(receivedTopic.getName());
-		fromDatabase.setAnswered(receivedTopic.isAnswered());
-		return Response.status(topicDao.update(fromDatabase) ? Status.NO_CONTENT : Status.NOT_FOUND).build();
+	public Response update(Topic receivedTopic) {
+		return responseCreator.ResponseUpdate(topicService.update(receivedTopic));
 	}
 
 }

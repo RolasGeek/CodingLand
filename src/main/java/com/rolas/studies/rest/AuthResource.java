@@ -18,15 +18,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.Response.Status;
 
-import com.rolas.studies.dao.userDao.UserDao;
+import com.rolas.studies.dao.user.UserDao;
 import com.rolas.studies.entities.User;
 import com.rolas.studies.security.Secured;
-import com.rolas.studies.util.KeyGenerator;
-import com.rolas.studies.util.ObjectParser;
+import com.rolas.studies.service.user.UserService;
+import com.rolas.studies.util.KeyGeneratorUtils;
+import com.rolas.studies.util.ResponseCreator;
 import com.sun.research.ws.wadl.Application;
 
 import io.jsonwebtoken.Jwts;
@@ -35,84 +39,59 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Path("auth")
 public class AuthResource {
 
-	@Inject
-	UserDao userDao;
+	@Inject UserService userService;
 	
-	@Inject 
-	KeyGenerator keyGenerator;
-	
-	@Inject ObjectParser objectParser;
+	@Inject ResponseCreator responseCreator;
 
 	@Path("login")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(@QueryParam("username") String userName, @QueryParam("password") String password) {
-		String token = "";
-		Integer id  = userDao.login(userName, password);
-		User u = (User) userDao.get(id);
-		if(u != null) {
-			HashMap<String, Object> loginData = new HashMap<>();
-			token = issueToken(userName);
-			loginData.put("token", token);
-			loginData.put("username", u.getUserName());
-			return Response.ok(loginData).build();
-		} else {
-			return Response.status(Response.Status.NO_CONTENT).build();
-		}
-		
+		HashMap<String, Object> userData = userService.login(userName, password);
+		return responseCreator.ResponseGet(userData);
 	}
 	
 	
 	@GET
 	@Secured
 	@PermitAll
-	public Response getUser(@QueryParam("username")String userName) {
-		return Response.ok(objectParser.mapToJson(userDao.getByName(userName))).build();
+	@Path("/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUser(@PathParam("username") String username ) {
+		User u = userService.getByName(username);
+		return responseCreator.ResponseGet(u);
 	}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(String json) {
-		User u = (User) objectParser.mapFromJson(json, User.class);
-		if(u.getId() != null) {
-			User dbUser = (User) userDao.get(u.getId());
-			dbUser.setEmail(u.getEmail());
-			dbUser.setFirstName(u.getFirstName());
-			dbUser.setLastName(u.getLastName());
-			dbUser.setRole(u.getRole());
-			if(userDao.update(dbUser)) {
-				return Response.status(Status.NO_CONTENT).build();
-			}
-		}
-		return Response.status(Status.NOT_FOUND).build();
+	public Response update(User u ) {
+		return responseCreator.ResponseUpdate(userService.update(u));
 	}
 	
 	
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response register(String json) {
-		User u = (User) objectParser.mapFromJson(json, User.class);
-		if (userDao.insertNewUser(u)) {
-			return Response.ok("1").build();
-		} else {
-			//FIXME check if exists
-			return Response.ok("2").build();
-		}
+	public Response register(User u ) {
+			return Response.ok(userService.insertNewUser(u) ? "1" : "2").build();
+	}
+	
+	@Path("me") 
+	@GET
+	@Secured
+	@PermitAll
+	public Response me(@Context SecurityContext sc) {
+		return responseCreator.ResponseGet(sc.getUserPrincipal());
+	}
+	
+	
+	@Path("refresh") 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response refresh(@Context HttpHeaders httpheaders) {
+		String rtoken = httpheaders.getHeaderString("refresh_token");
+		return responseCreator.ResponseGet(userService.refresh(rtoken));
 	}
 
-	private String issueToken(String login) {
-		Key key = keyGenerator.generateKey();
-		String jwtToken = Jwts.builder().setSubject(login).setIssuer("codingLand").setIssuedAt(new Date())
-				.setExpiration(toDate(LocalDateTime.now().plusMinutes(45L))).signWith(SignatureAlgorithm.HS512, key)
-				.compact();
-
-		return jwtToken;
-
-	}
-
-	private Date toDate(LocalDateTime localDateTime) {
-		return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-	}
 
 }

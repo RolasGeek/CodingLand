@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.rolas.studies.dao.categoryDao.CategoryDao;
-import com.rolas.studies.dao.topicDao.TopicDao;
+import com.rolas.studies.dao.category.CategoryDao;
+import com.rolas.studies.dao.topic.TopicDao;
 
 import java.util.Date;
 import java.util.List;

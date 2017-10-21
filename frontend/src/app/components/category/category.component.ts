@@ -28,7 +28,6 @@ export class CategoryComponent implements OnInit {
   delete(id) {
       this.topicService.delete(id).subscribe(suc => { this.deleted = true}, err => {this.deleted = false;
       })
-      delete this.topics;
       this.ngOnInit();
   }
   

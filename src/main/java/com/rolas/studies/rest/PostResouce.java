@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -19,69 +20,47 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import com.rolas.studies.dao.postDao.PostDao;
+import com.rolas.studies.dao.post.PostDao;
 import com.rolas.studies.entities.Post;
 import com.rolas.studies.security.Secured;
-import com.rolas.studies.util.ObjectParser;
+import com.rolas.studies.service.post.PostService;
+import com.rolas.studies.util.ResponseCreator;
 
 @Path("post")
 public class PostResouce {
 	
-	@Inject PostDao postDao;
+	@Inject PostService postService;
 	
-	@Inject ObjectParser objectParser;
+	@Inject ResponseCreator responseCreator;
+	
 
+	@Path("/{id}")
 	@GET
-	public Response get(@QueryParam("id")Integer id, @QueryParam("topicId")Integer topicId) {
-		if(id != null && topicId == null) {
-			return Response.ok(objectParser.mapToJson(postDao.get(id))).build();
-		} else if(id == null && topicId != null) {
-			return Response.ok(objectParser.mapToJson(postDao.getByTopicId(topicId))).build();
-		} else {
-			return Response.ok(objectParser.mapToJson(postDao.getAll())).build();
-		}
-	
+	public Response get(@PathParam("id")Integer id, @QueryParam("topicId")Integer topicId) {
+		return responseCreator.ResponseGet(id != 0 ? 
+				postService.get(id) : postService.getByTopic(topicId));
 	}
 	
 	@POST
 	@Secured
 	@PermitAll
-	public Response post(String json, @Context UriInfo uriInfo) {
-		Post post = (Post) objectParser.mapFromJson(json, Post.class);
-		post.setInsertDate(new Date());
-		Integer id = postDao.persist(post);
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-		builder.path(Integer.toString(id));
-		return Response.created(builder.build()).entity(post).build();
+	public Response post(Post post, @Context UriInfo uriInfo) {
+		Post persisted = postService.insert(post);
+		return responseCreator.ResponseCreated(uriInfo, persisted.getId(), persisted);
 	}
 	
 	@PUT
 	@Secured
 	@PermitAll
-	public Response update(String json) {
-		Post post = (Post) objectParser.mapFromJson(json, Post.class);
-		if(post.getId() != null) {
-			Post fromDb = postDao.get(post.getId());
-			fromDb.setComment(post.getComment());
-			fromDb.setSolution(post.getSolution());
-			fromDb.setUpdateDate(new Date());
-			if(postDao.update(fromDb)) {
-				return Response.status(Status.NO_CONTENT).build();
-			}
-		}
-		post.setUpdateDate(new Date());
-		return Response.status(Status.NOT_FOUND).build();
+	public Response update(Post post ) {
+		return responseCreator.ResponseUpdate(postService.update(post));
 	}
 	
 	@DELETE
 	@Secured
 	@RolesAllowed("ADMIN")
 	public Response delete(@QueryParam("id")Integer id) {
-		if(postDao.delete(id)) {
-		return Response.ok().build();
-		} else {
-			return Response.status(Status.NO_CONTENT).build();
-		}
+		return responseCreator.ResponseDelete(postService.delete(id));
 	}
 	
 	

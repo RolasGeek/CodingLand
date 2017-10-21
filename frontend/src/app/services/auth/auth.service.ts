@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { User } from './../../classes/user';
 
+const url = 'api/auth/'
+
 @Injectable()
 export class AuthService {
     user: User = new User();
@@ -17,7 +19,7 @@ export class AuthService {
     public refnesh() {
         if ( this.isLoggedIn() ) {
             console.log(localStorage.getItem( 'username' ) );
-            return this.get( localStorage.getItem( 'username' ) ).subscribe(( data: any ) => this.user = data );
+            return this.me().subscribe(( data: any ) => this.user = data );
         }
     }
 
@@ -26,11 +28,11 @@ export class AuthService {
     }
 
     login( username: string, password: string ) {
-        return this.http.get( 'api/auth/login', { params: new HttpParams().set( 'username', username ).set( 'password', password ) } )
+        return this.http.get( 'api/auth/login', { params: new HttpParams().set( 'username', username ).set( 'password', password ) })
             .subscribe(( data: any ) => {
                 if ( data !== null ) {
                     localStorage.setItem( 'token', data.token );
-                    localStorage.setItem( 'username', data.username );
+                    localStorage.setItem( 'refresh_token', data.refresh_token);
                     this.router.navigate( ['/'] );
                     this.refnesh();
                 } else {
@@ -42,12 +44,18 @@ export class AuthService {
 
 
     register( user ) {
-        return this.http.post( 'api/auth', user ).subscribe((data:any) => { this.success = data == 1; this.error = data == 2; });
+        return this.http.post( url, user ).subscribe((data:any) => { this.success = data == 1; this.error = data == 2; });
     }
 
     public get( username ) {
-        return this.http.get( 'api/auth', { params: new HttpParams().set( 'username', username ) } );
+        return this.http.get( url + username);
     }
+    
+    public me() {
+        return this.http.get( url + 'me');
+    }
+    
+    
 
     public logout() {
         localStorage.clear();

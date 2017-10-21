@@ -51,10 +51,12 @@ public class User implements Serializable, Principal {
 	
 	//bi-directional many-to-one association to Post
 	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
+	@JsonIgnore
 	private List<Post> posts;
 
 	//bi-directional many-to-one association to Topic
 	@OneToMany(mappedBy="user",  fetch=FetchType.LAZY)
+	@JsonIgnore
 	private List<Topic> topics;
 
 

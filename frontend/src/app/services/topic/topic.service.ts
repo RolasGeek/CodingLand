@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Topic } from './../../classes/topic';
 
-const url = 'api/topic'
+const url = 'api/topic/'
 
 @Injectable()
 export class TopicService {
@@ -13,15 +13,15 @@ export class TopicService {
     }
     
     getAll(number) : Observable<Array<Topic>> {
-        return this.http.get(url,  {params: new HttpParams().set( 'categoryId' , number)}).map((data :any)  => {return data;});
+        return this.http.get(url+ '0',  {params: new HttpParams().set( 'categoryId' , number)}).map((data :any)  => {return data;});
     }
     
     get(id) : Observable<Topic> {
-        return this.http.get(url, {params: new HttpParams().set( 'id' , id)}).map((data :any)  => {return data;});
+        return this.http.get(url+ id ).map((data :any)  => {return data;});
     }
     
     delete(id) {
-        return this.http.delete(url, {params:new HttpParams().set( 'id' , id) });
+        return this.http.delete(url+ id);
     }
     
     update(values) {

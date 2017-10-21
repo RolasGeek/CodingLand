@@ -6,8 +6,10 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -36,6 +38,7 @@ public class Post implements Serializable {
 	//bi-directional many-to-one association to Topic
 	@ManyToOne
 	@JoinColumn(name="topic_id")
+	@JsonIgnore
 	private Topic topic;
 
 	//bi-directional many-to-one association to User
@@ -73,7 +76,7 @@ public class Post implements Serializable {
 	public void setCorrect(boolean isCorrect) {
 		this.isCorrect = isCorrect;
 	}
-
+	@JsonProperty("solution")
 	public String getSolution() {
 		return solution;
 	}

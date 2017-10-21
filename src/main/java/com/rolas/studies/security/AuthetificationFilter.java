@@ -22,10 +22,11 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.rolas.studies.dao.userDao.UserDao;
+import com.rolas.studies.dao.user.UserDao;
 import com.rolas.studies.entities.User;
-import com.rolas.studies.util.KeyGenerator;
-import com.rolas.studies.util.KeyGeneratorImpl;
+import com.rolas.studies.util.JwtTokenUtils;
+import com.rolas.studies.util.KeyGeneratorUtils;
+import com.rolas.studies.util.KeyGeneratorUtilsImpl;
 
 import io.jsonwebtoken.Jwts;
 
@@ -41,7 +42,7 @@ public class AuthetificationFilter implements ContainerRequestFilter {
 	
 
 	@Inject
-	private javax.inject.Provider<KeyGenerator> keyGeneratorProvider;
+	private javax.inject.Provider<JwtTokenUtils> jwtToken;
 
 	@Inject
 	private javax.inject.Provider<UserDao> userDaoProvider;
@@ -86,7 +87,7 @@ public class AuthetificationFilter implements ContainerRequestFilter {
 	public User authentificate(String token) {
 		try {
 			//Getting token info
-			String login = Jwts.parser().setSigningKey(keyGeneratorProvider.get().generateKey()).parseClaimsJws(token).getBody().getSubject();
+			String login = jwtToken.get().validate(token).getSubject();
 			User u = userDaoProvider.get().getByName(login);
 			return u;
 		} catch (Exception e) {
