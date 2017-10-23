@@ -21,8 +21,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+
+import org.glassfish.jersey.message.internal.NewCookieProvider;
+
 import javax.ws.rs.core.Response.Status;
 
 import com.rolas.studies.dao.user.UserDao;
@@ -44,10 +48,10 @@ public class AuthResource {
 	@Inject ResponseCreator responseCreator;
 
 	@Path("login")
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response login(@QueryParam("username") String userName, @QueryParam("password") String password) {
-		HashMap<String, Object> userData = userService.login(userName, password);
+	public Response login(User u) {
+		HashMap<String, Object> userData = userService.login(u.getUserName(), u.getPassword());
 		return responseCreator.ResponseGet(userData);
 	}
 	

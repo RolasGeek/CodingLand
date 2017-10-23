@@ -45,8 +45,8 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	}
 
 	@Override
-	public Object get(Integer id) {
-		return super.get(id, User.class);
+	public User get(Integer id) {
+		return (User) super.get(id, User.class);
 	}
 
 

@@ -9,7 +9,7 @@ public interface UserDao {
 	public Object persist(Object o);
 	public User getByName(String name);
 	public boolean insertNewUser(User user);
-	public Object get(Integer id);
+	public User get(Integer id);
 	public Integer login(String username, String password);
 	public boolean update(Object o);
 }

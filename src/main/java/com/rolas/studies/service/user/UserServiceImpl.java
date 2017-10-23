@@ -67,7 +67,6 @@ public class UserServiceImpl  implements UserService {
 		if(username != null) {
 			HashMap<String, Object> loginData = new HashMap<>();
 			Date expDate = jwtToken.toDate(LocalDateTime.now().plusMinutes(45L)); //Token expiration time for 45mins
-			Date rExpDate = jwtToken.toDate(LocalDateTime.now().plusYears(2)); //Refresh token expiration time for 2 years
 			loginData.put("token", jwtToken.issueToken(username,expDate, false));
 			loginData.put("expirationDate", expDate);
 			loginData.put("refresh_token",  rtoken);

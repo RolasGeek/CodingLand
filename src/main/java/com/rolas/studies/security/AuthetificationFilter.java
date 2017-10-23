@@ -70,9 +70,9 @@ public class AuthetificationFilter implements ContainerRequestFilter {
 			requestContext.setSecurityContext(new SecurityContextImpl(authentificate(token)));
 
 			// Checking if user contains roles described or resource
-			if (!isUserAllowed(requestContext)) {
-				throw new NotAuthorizedException("You dont have access to this resource");
-			}
+//			if (!isUserAllowed(requestContext)) {
+//				throw new NotAuthorizedException("You dont have access to this resource");
+//			}
 
 		} catch (Exception e) {
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());

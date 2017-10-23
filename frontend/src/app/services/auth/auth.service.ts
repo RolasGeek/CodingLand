@@ -28,7 +28,10 @@ export class AuthService {
     }
 
     login( username: string, password: string ) {
-        return this.http.get( 'api/auth/login', { params: new HttpParams().set( 'username', username ).set( 'password', password ) })
+        var data = new User();
+        data.userName = username;
+        data.password = password;
+        return this.http.post( 'api/auth/login', data)
             .subscribe(( data: any ) => {
                 if ( data !== null ) {
                     localStorage.setItem( 'token', data.token );
