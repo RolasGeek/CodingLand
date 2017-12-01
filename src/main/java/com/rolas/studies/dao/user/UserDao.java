@@ -2,6 +2,7 @@ package com.rolas.studies.dao.user;
 
 import java.util.List;
 
+import com.rolas.studies.dto.UserDTO;
 import com.rolas.studies.entities.User;
 
 public interface UserDao {
@@ -12,4 +13,6 @@ public interface UserDao {
 	public User get(Integer id);
 	public Integer login(String username, String password);
 	public boolean update(Object o);
+	public boolean delete(Integer id);
+	public boolean changePass(UserDTO u);
 }

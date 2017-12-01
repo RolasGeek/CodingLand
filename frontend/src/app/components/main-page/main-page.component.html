@@ -2,9 +2,34 @@
 <div class="container">
 	<div class="row">
 		<div *ngFor="let category of categories" class="col-lg-4">
-			 <a [routerLink]="['category/', category.id]" routerLinkActive="active" class="btn btn-sq-lg btn-primary">
+			 <a [routerLink]="['category/', category.id]" outerLinkActive="active" class="btn btn-sq-lg btn-primary">
                <p  class="text-center">{{category.name}}</p><br>
             </a>
 		</div>
 	</div>
 </div>
+<ngb-carousel>
+  <ng-template ngbSlide>
+  	<div style="height: 200px"></div>
+    <div class="carousel-caption">
+      <h3>10 seconds between slides...</h3>
+      <p>This carousel uses customized default values.</p>
+    </div>
+  </ng-template>
+  <ng-template ngbSlide    >
+    	<div style="height: 200px" ></div>
+    <div class="carousel-caption">
+    
+      <h3>No keyboard...</h3>
+      <p>This carousel uses customized default values.</p>
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    	<div style="height: 200px"></div>
+    <div class="carousel-caption">
+      <h3>And no wrap after last slide.</h3>
+      <p>This carousel uses customized default values.</p>
+    </div>
+  </ng-template>
+</ngb-carousel>
+

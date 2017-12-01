@@ -1,12 +1,8 @@
 package com.rolas.studies.rest;
 
-import java.net.URI;
-import java.util.Date;
-
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,15 +13,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.rolas.studies.dao.category.CategoryDao;
-import com.rolas.studies.dao.topic.TopicDao;
-import com.rolas.studies.dao.user.UserDao;
-import com.rolas.studies.entities.Category;
 import com.rolas.studies.entities.Topic;
 import com.rolas.studies.entities.User;
 import com.rolas.studies.security.Secured;
@@ -39,6 +31,14 @@ public class TopicsResource {
 	
 	@Inject TopicService topicService;
 
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAll() {
+		return responseCreator.ResponseGet(topicService.getAll());
+	}
+	
+	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -50,16 +50,18 @@ public class TopicsResource {
 	@DELETE
 	@Path("/{id}")
 	@Secured
-	@RolesAllowed("ADMIN")
-	public Response delete(@PathParam("id") Integer id) {
-		return responseCreator.ResponseDelete(topicService.delete(id));
+	@PermitAll
+	public Response delete(@PathParam("id") Integer id, @Context SecurityContext sc) {
+		return responseCreator.ResponseDelete(topicService.delete(id, (User) sc.getUserPrincipal()));
 	}
 
 	@POST
 	@Secured
 	@PermitAll
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response post(Topic topic, @Context UriInfo uriInfo) {
 		Topic persisted = topicService.insert(topic);
+		if(persisted == null) return Response.status(Status.BAD_REQUEST).build();
 		return responseCreator.ResponseCreated(uriInfo, persisted.getId(), persisted);
 	}
 

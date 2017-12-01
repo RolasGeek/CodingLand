@@ -5,10 +5,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -46,6 +44,7 @@ public class Post implements Serializable {
 	@JoinColumn(name="user_id")
 	private User user;
 	
+	
 	@Column(name="insert_date")
 	private Date insertDate;
 	
@@ -54,6 +53,7 @@ public class Post implements Serializable {
 
 	public Post() {
 	}
+	
 
 	public Integer getId() {
 		return this.id;
@@ -69,11 +69,11 @@ public class Post implements Serializable {
 
 	
 
-	public boolean isCorrect() {
+	public boolean getIsCorrect() {
 		return isCorrect;
 	}
 
-	public void setCorrect(boolean isCorrect) {
+	public void setIsCorrect(boolean isCorrect) {
 		this.isCorrect = isCorrect;
 	}
 	@JsonProperty("solution")
@@ -89,9 +89,6 @@ public class Post implements Serializable {
 		this.comment = comment;
 	}
 
-	public Topic getTopic() {
-		return this.topic;
-	}
 
 	public void setTopic(Topic topic) {
 		this.topic = topic;
@@ -124,9 +121,9 @@ public class Post implements Serializable {
 	//Custom setters
 	
 	public void setUserId(Integer id) {
-		User u = new  User();
+		User u = new User();
 		u.setId(id);
-		this.setUser(u);
+		this.user = u;
 	}
 	
 	public void setTopicId(Integer id) {

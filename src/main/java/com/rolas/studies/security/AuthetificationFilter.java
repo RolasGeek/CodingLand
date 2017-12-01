@@ -2,16 +2,11 @@ package com.rolas.studies.security;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.AccessDeniedException;
-import java.security.Key;
-
 import javax.annotation.Priority;
-import javax.annotation.Resource;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -25,10 +20,7 @@ import javax.ws.rs.ext.Provider;
 import com.rolas.studies.dao.user.UserDao;
 import com.rolas.studies.entities.User;
 import com.rolas.studies.util.JwtTokenUtils;
-import com.rolas.studies.util.KeyGeneratorUtils;
-import com.rolas.studies.util.KeyGeneratorUtilsImpl;
-
-import io.jsonwebtoken.Jwts;
+import com.rolas.studies.util.LogicLogger;
 
 /**
  * @author Rolandas
@@ -89,6 +81,7 @@ public class AuthetificationFilter implements ContainerRequestFilter {
 			//Getting token info
 			String login = jwtToken.get().validate(token).getSubject();
 			User u = userDaoProvider.get().getByName(login);
+			LogicLogger.getLogger(AuthetificationFilter.class).info("Logged in:" + u.getName(), null);
 			return u;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,70 +89,70 @@ public class AuthetificationFilter implements ContainerRequestFilter {
 		}
 	}
 
-	public boolean isUserAllowed(ContainerRequestContext requestContext) {
-		Method method = resourceInfo.getResourceMethod();
-
-		// @DenyAll on the method takes precedence over @RolesAllowed and @PermitAll
-		if (method.isAnnotationPresent(DenyAll.class)) {
-			refuseRequest();
-		}
-
-		// @RolesAllowed on the method takes precedence over @PermitAll
-		RolesAllowed rolesAllowed = method.getAnnotation(RolesAllowed.class);
-		if (rolesAllowed != null) {
-			performAuthorization(rolesAllowed.value(), requestContext);
-			return true;
-		}
-
-		// @PermitAll on the method takes precedence over @RolesAllowed on the class
-		if (method.isAnnotationPresent(PermitAll.class)) {
-			// Do nothing
-			return true;
-		}
-
-		// @RolesAllowed on the class takes precedence over @PermitAll on the class
-		rolesAllowed = resourceInfo.getResourceClass().getAnnotation(RolesAllowed.class);
-		if (rolesAllowed != null) {
-			performAuthorization(rolesAllowed.value(), requestContext);
-			return true;
-		}
-
-		// @PermitAll on the class
-		if (resourceInfo.getResourceClass().isAnnotationPresent(PermitAll.class)) {
-			// Do nothing
-			return true;
-		}
-		return false;
-
-	}
-
-	/**
-	 * Perform authorization based on roles.
-	 *
-	 * @param rolesAllowed
-	 * @param requestContext
-	 */
-	private void performAuthorization(String[] rolesAllowed, ContainerRequestContext requestContext) {
-
-		if (rolesAllowed.length < 1 && requestContext.getSecurityContext().getUserPrincipal() == null) {
-			refuseRequest();
-		}
-
-		for (final String role : rolesAllowed) {
-			if (requestContext.getSecurityContext().isUserInRole(role)) {
-				return;
-			}
-		}
-
-		refuseRequest();
-	}
-
-	/**
-	 * Refuse the request.
-	 * 
-	 * @throws NotAuthorizedException
-	 */
-	private void refuseRequest() {
-		throw new NotAuthorizedException("You dont have access to this resource");
-	}
+//	public boolean isUserAllowed(ContainerRequestContext requestContext) {
+//		Method method = resourceInfo.getResourceMethod();
+//
+//		// @DenyAll on the method takes precedence over @RolesAllowed and @PermitAll
+//		if (method.isAnnotationPresent(DenyAll.class)) {
+//			refuseRequest();
+//		}
+//
+//		// @RolesAllowed on the method takes precedence over @PermitAll
+//		RolesAllowed rolesAllowed = method.getAnnotation(RolesAllowed.class);
+//		if (rolesAllowed != null) {
+//			performAuthorization(rolesAllowed.value(), requestContext);
+//			return true;
+//		}
+//
+//		// @PermitAll on the method takes precedence over @RolesAllowed on the class
+//		if (method.isAnnotationPresent(PermitAll.class)) {
+//			// Do nothing
+//			return true;
+//		}
+//
+//		// @RolesAllowed on the class takes precedence over @PermitAll on the class
+//		rolesAllowed = resourceInfo.getResourceClass().getAnnotation(RolesAllowed.class);
+//		if (rolesAllowed != null) {
+//			performAuthorization(rolesAllowed.value(), requestContext);
+//			return true;
+//		}
+//
+//		// @PermitAll on the class
+//		if (resourceInfo.getResourceClass().isAnnotationPresent(PermitAll.class)) {
+//			// Do nothing
+//			return true;
+//		}
+//		return false;
+//
+//	}
+//
+//	/**
+//	 * Perform authorization based on roles.
+//	 *
+//	 * @param rolesAllowed
+//	 * @param requestContext
+//	 */
+//	private void performAuthorization(String[] rolesAllowed, ContainerRequestContext requestContext) {
+//
+//		if (rolesAllowed.length < 1 && requestContext.getSecurityContext().getUserPrincipal() == null) {
+//			refuseRequest();
+//		}
+//
+//		for (final String role : rolesAllowed) {
+//			if (requestContext.getSecurityContext().isUserInRole(role)) {
+//				return;
+//			}
+//		}
+//
+//		refuseRequest();
+//	}
+//
+//	/**
+//	 * Refuse the request.
+//	 * 
+//	 * @throws NotAuthorizedException
+//	 */
+//	private void refuseRequest() {
+//		throw new NotAuthorizedException("You dont have access to this resource");
+//	}
 }

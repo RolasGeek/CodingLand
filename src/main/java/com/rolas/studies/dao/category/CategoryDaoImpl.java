@@ -21,29 +21,17 @@ public class CategoryDaoImpl extends BaseDao<Category> implements CategoryDao {
 
 	@Override
 	public Category persist(Category c) {
-		if (c == null) return null;
 		return (Category) super.persist(c);
 	}
 
 	@Override
 	public boolean delete(Integer id) {
-		if(id == null) return false;
 		Category c = this.get(id);
-		try {
-			em.getTransaction().begin();
-			em.remove(c);
-			em.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	@Override
-	public boolean update(Category c) {
 		if(c == null) return false;
-		return super.update(c);
+		em.getTransaction().begin();
+		em.remove(c);
+		em.getTransaction().commit();
+		return true;
 	}
 
 }

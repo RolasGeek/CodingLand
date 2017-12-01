@@ -9,5 +9,5 @@ public interface CategoryDao {
 	public Category persist(Category c);
 	public Category get(Integer id);
 	public boolean delete(Integer id);
-	public boolean update(Category c);
+	public boolean update(Object o);
 }

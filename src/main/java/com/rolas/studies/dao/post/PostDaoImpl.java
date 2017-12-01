@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.rolas.studies.dao.BaseDao;
 import com.rolas.studies.entities.Post;
-import com.rolas.studies.entities.Topic;
 
 public class PostDaoImpl extends BaseDao<Post> implements PostDao {
 
@@ -39,15 +38,11 @@ public class PostDaoImpl extends BaseDao<Post> implements PostDao {
 	@Override
 	public boolean delete(Integer id) {
 		Post post = em.find(Post.class, id);
-		try {
-			em.getTransaction().begin();
-			em.remove(post);
-			em.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			//TODO Sukurti loggery
-			return false;
-		}
+		if(post == null) return false;
+		em.getTransaction().begin();
+		em.remove(post);
+		em.getTransaction().commit();
+		return true;
 	}
 
 }

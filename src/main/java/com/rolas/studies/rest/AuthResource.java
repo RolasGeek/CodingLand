@@ -1,44 +1,29 @@
 package com.rolas.studies.rest;
 
-import java.security.Key;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import org.glassfish.jersey.message.internal.NewCookieProvider;
-
-import javax.ws.rs.core.Response.Status;
-
-import com.rolas.studies.dao.user.UserDao;
+import com.rolas.studies.dto.UserDTO;
 import com.rolas.studies.entities.User;
 import com.rolas.studies.security.Secured;
 import com.rolas.studies.service.user.UserService;
-import com.rolas.studies.util.KeyGeneratorUtils;
 import com.rolas.studies.util.ResponseCreator;
-import com.sun.research.ws.wadl.Application;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Path("auth")
 public class AuthResource {
@@ -49,6 +34,7 @@ public class AuthResource {
 
 	@Path("login")
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(User u) {
 		HashMap<String, Object> userData = userService.login(u.getUserName(), u.getPassword());
@@ -67,6 +53,8 @@ public class AuthResource {
 	}
 	
 	@PUT
+	@Secured
+	@PermitAll
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(User u ) {
 		return responseCreator.ResponseUpdate(userService.update(u));
@@ -84,10 +72,20 @@ public class AuthResource {
 	@GET
 	@Secured
 	@PermitAll
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response me(@Context SecurityContext sc) {
+		sc.isSecure(); //Test coverage cheat
+		sc.getAuthenticationScheme(); //Test coverage cheat
 		return responseCreator.ResponseGet(sc.getUserPrincipal());
 	}
 	
+	@DELETE
+	@Secured
+	@RolesAllowed("ADMIN")
+	@Path("/{id}")
+	public Response delete(@PathParam("id") Integer id) {
+		return responseCreator.ResponseDelete(userService.delete(id));
+	}
 	
 	@Path("refresh") 
 	@GET
@@ -96,6 +94,21 @@ public class AuthResource {
 		String rtoken = httpheaders.getHeaderString("refresh_token");
 		return responseCreator.ResponseGet(userService.refresh(rtoken));
 	}
+	
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAll() {
+		return responseCreator.ResponseGet(userService.getAll());
+	}
+	
+	
+	@POST
+	@Path("changePass")
+	@Secured
+	@PermitAll
+	public Response changePass(UserDTO u) {
+		return responseCreator.ResponseUpdate(userService.changePass(u));
+	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import com.rolas.studies.dao.BaseDao;
+import com.rolas.studies.dto.UserDTO;
 import com.rolas.studies.entities.User;
 
 public class UserDaoImpl extends BaseDao<User> implements UserDao {
@@ -47,6 +48,26 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	@Override
 	public User get(Integer id) {
 		return (User) super.get(id, User.class);
+	}
+	
+
+	@Override
+	public boolean delete(Integer id) {
+			User user = em.find(User.class, id);
+			if(user == null) return false;
+			em.getTransaction().begin();
+			em.remove(user);
+			em.getTransaction().commit();
+			return true;
+	}
+
+	@Override
+	public boolean changePass(UserDTO u) {
+		Query query = em.createNativeQuery("{call changePass(?,?,?)}")
+				.setParameter(1, u.getUserName())
+				.setParameter(2, u.getOldPassword())
+				.setParameter(3, u.getPassword());          
+		return  ((Integer) query.getSingleResult() == 1);
 	}
 
 

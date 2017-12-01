@@ -13,8 +13,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
-import com.rolas.studies.dao.category.CategoryDao;
 import com.rolas.studies.entities.Category;
 import com.rolas.studies.security.Secured;
 import com.rolas.studies.service.category.CategoryService;
@@ -34,12 +34,23 @@ public class CategoryResource {
 		return responseCreator.ResponseGet(categoryService.getAll());
 	}
 	
+	@Path("/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response get(@PathParam("id")Integer id) {
+		return responseCreator.ResponseGet(categoryService.get(id));
+	}
+	
+	
+	
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@RolesAllowed("ADMIN")
 	public Response insert(Category category, @Context UriInfo uriInfo) {
 		Category persisted = categoryService.insert(category);
+		if(persisted == null) return Response.status(Status.BAD_REQUEST).build();
 		return responseCreator.ResponseCreated(uriInfo, persisted.getId(), persisted);
 	}
 	@PUT

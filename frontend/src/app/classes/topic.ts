@@ -6,7 +6,7 @@ export class Topic {
     user : User = null;
     name : string = '';
     description : string = '';
-    isAnswered : boolean = false;
+    answered : boolean = false;
     insertDate: Date;
     updateDate : Date;
     postCount : number;

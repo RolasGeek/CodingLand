@@ -9,4 +9,5 @@ public interface CategoryService {
 	public Category insert(Category c);
 	public boolean update(Category c);
 	public boolean delete(Integer id);
+	public Category get(Integer id);
 }

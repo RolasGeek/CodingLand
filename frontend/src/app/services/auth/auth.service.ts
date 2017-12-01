@@ -8,7 +8,7 @@ const url = 'api/auth/'
 
 @Injectable()
 export class AuthService {
-    user: User = new User();
+    user: User;
     error: boolean;
     success: boolean;
     constructor( private http: HttpClient, private router: Router ) {
@@ -18,7 +18,6 @@ export class AuthService {
 
     public refnesh() {
         if ( this.isLoggedIn() ) {
-            console.log(localStorage.getItem( 'username' ) );
             return this.me().subscribe(( data: any ) => this.user = data );
         }
     }
@@ -33,7 +32,7 @@ export class AuthService {
         data.password = password;
         return this.http.post( 'api/auth/login', data)
             .subscribe(( data: any ) => {
-                if ( data !== null ) {
+                if ( data ) {
                     localStorage.setItem( 'token', data.token );
                     localStorage.setItem( 'refresh_token', data.refresh_token);
                     this.router.navigate( ['/'] );
@@ -58,10 +57,33 @@ export class AuthService {
         return this.http.get( url + 'me');
     }
     
+    public refreshToken() {
+        return this.http.get( url + 'refresh').subscribe(( data: any ) => {
+            if ( data ) {
+                localStorage.setItem( 'token', data.token );
+                localStorage.setItem( 'refresh_token', data.refresh_token);
+                this.refnesh();
+            }
+        });
+    }
+    
+    public put(data) {
+        return this.http.put( url, data);
+    }
+    
+    public changePass(data) {
+        return this.http.post(url + 'changePass', data);
+    }
     
 
     public logout() {
         localStorage.clear();
+    }
+    
+    public isAdmin() {
+        if(this.isLoggedIn() && this.user) {
+            return this.user.role.objectCode == 'ADMIN';
+        }
     }
 
 }

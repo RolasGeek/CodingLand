@@ -3,8 +3,6 @@ package com.rolas.studies.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -35,6 +33,7 @@ public class Category implements Serializable {
 
 	
 	@OneToMany(mappedBy="category")
+	@JsonManagedReference
 	private List<Topic> topics;
 
 	public Category() {
@@ -74,26 +73,5 @@ public class Category implements Serializable {
 		this.description = description;
 	}
 
-	public List<Topic> getTopics() {
-		return this.topics;
-	}
-
-	public void setTopics(List<Topic> topics) {
-		this.topics = topics;
-	}
-
-	public Topic addTopic(Topic topic) {
-		getTopics().add(topic);
-		topic.setCategory(this);
-
-		return topic;
-	}
-
-	public Topic removeTopic(Topic topic) {
-		getTopics().remove(topic);
-		topic.setCategory(null);
-
-		return topic;
-	}
 
 }

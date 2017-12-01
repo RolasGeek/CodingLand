@@ -17,10 +17,12 @@ export class TokenInterceptor implements HttpInterceptor {
     }
     intercept( request: HttpRequest<any>, next: HttpHandler ): Observable<HttpEvent<any>> {
         var token = localStorage.getItem( 'token' );
+        var rtoken = localStorage.getItem( 'refresh_token' );
         if ( token ) {
             request = request.clone( {
                 setHeaders: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    refresh_token: rtoken
                     
                 }
             } );

@@ -4,49 +4,37 @@ import java.util.List;
 
 import com.rolas.studies.dao.BaseDao;
 import com.rolas.studies.entities.Topic;
+import com.rolas.studies.views.TopicVW;
 
-public class TopicDaoImpl extends BaseDao<Topic> implements TopicDao{
-
+public class TopicDaoImpl extends BaseDao<Topic> implements TopicDao {
 
 	@Override
-	public List<Topic> getAll() {
-		return em.createNamedQuery("Topic.findAll", Topic.class).getResultList();
+	public List<TopicVW> getAll() {
+		return em.createNamedQuery("TopicVW.findAll", TopicVW.class).getResultList();
 	}
-	
+
 	public Topic persist(Topic topic) {
-		if(topic == null) return null;
-		return ((Topic)super.persist(topic));
+		return ((Topic) super.persist(topic));
 	}
 
 	@Override
 	public boolean delete(Integer id) {
-		if(id == null) return false;
-		try {
-			Topic topic = em.find(Topic.class, id);
-			em.getTransaction().begin();
-			em.remove(topic);
-			em.getTransaction().commit();
-			return true;
-		}catch (Exception e) {
-			e.printStackTrace();//FIXME susikurti logery
+		Topic topic = em.find(Topic.class, id);
+		if (topic == null)
 			return false;
-		}
+		em.getTransaction().begin();
+		em.remove(topic);
+		em.getTransaction().commit();
+		return true;
 	}
 
 	@Override
-	public List<Topic> getByCategory(Integer id) {
-		if(id == null) return null;
-		try {
-			return em.createNamedQuery("Topic.findByCategory", Topic.class).setParameter("categoryId", id).getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();//FIXME susikurti logery
-			return null;
-		}
+	public List<TopicVW> getByCategory(Integer id) {
+		return em.createNamedQuery("TopicVW.findByCategory", TopicVW.class).setParameter("categoryId", id).getResultList();
 	}
 
 	@Override
 	public Topic get(Integer id) {
-		if(id == null) return null;
 		return (Topic) super.get(id, Topic.class);
 	}
 

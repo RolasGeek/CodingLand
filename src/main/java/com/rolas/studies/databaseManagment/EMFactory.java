@@ -30,6 +30,5 @@ public class EMFactory implements Factory<EntityManager> {
     }
 	@Override
 	public void dispose(EntityManager instance) {
-	     System.out.println("test");
 	}
 }

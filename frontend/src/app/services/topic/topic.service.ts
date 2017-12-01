@@ -12,8 +12,8 @@ export class TopicService {
     constructor( private http: HttpClient ) {
     }
     
-    getAll(number) : Observable<Array<Topic>> {
-        return this.http.get(url+ '0',  {params: new HttpParams().set( 'categoryId' , number)}).map((data :any)  => {return data;});
+    getAll(number){
+        return this.http.get(url+ '0',  {params: new HttpParams().set( 'categoryId' , number)});
     }
     
     get(id) : Observable<Topic> {

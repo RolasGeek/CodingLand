@@ -6,10 +6,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -60,22 +58,7 @@ public class User implements Serializable, Principal {
 	private List<Topic> topics;
 
 
-	public List<Post> getPosts() {
-		return posts;
-	}
-
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
 	
-	
-	public List<Topic> getTopics() {
-		return topics;
-	}
-
-	public void setTopics(List<Topic> topics) {
-		this.topics = topics;
-	}
 
 	public User() {
 	}
@@ -137,9 +120,15 @@ public class User implements Serializable, Principal {
 	}
 
 	@Override
+	@JsonIgnore
 	public String getName() {
 	
 		return getFirstName() + " " + getLastName();
 	}
 
+	//Custom
+	@JsonIgnore
+	public boolean isAdmin() {
+		return "ADMIN".equals(this.role.getObjectCode());
+	}
 }

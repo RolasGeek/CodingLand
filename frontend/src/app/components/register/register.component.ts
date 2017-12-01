@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../services/auth/auth.service';
 import { FormBuilder, FormGroup, Validators,FormControl } from '@angular/forms';
 import { User } from './../../classes/user';
+import { routerTransition } from './../../router.animations';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  animations: [routerTransition()],
+  host: {'[@routerTransition]': ''}
 })
 export class RegisterComponent implements OnInit {
 

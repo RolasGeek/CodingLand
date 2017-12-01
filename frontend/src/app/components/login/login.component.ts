@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../services/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { routerTransition } from './../../router.animations';
 
 @Component( {
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    styleUrls: ['./login.component.css'],
+    animations: [routerTransition()],
+    host: {'[@routerTransition]': ''}
 } )
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;

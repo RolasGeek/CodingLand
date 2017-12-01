@@ -1,37 +1,70 @@
-<div class="container">
-	<div *ngIf="!topic">Loading</div>
-	<div *ngIf="topic">
-		<div class="post-topic post-data">
-			<p>Name:{{topic.name}}</p>
-			<p>Description: {{topic.description}}</p>
+
+<div *ngIf="!topic">Loading</div>
+<div *ngIf="topic">
+	<div class="m-3" >
+		<h1>Topic</h1>
+		<div class="row border border-dark"></div>
+		<br>
+		<div class="row">
+			<div class="col-xl-3 ml-3">
+				<div class="float-center">
+					Author: {{topic.user.userName}}<br> <img
+						src="assets/profilepic.png" class="prof-pic-topic">
+				</div>
+			</div>
+			<div class="col-xl-8 mt-5">
+				<h3>
+					Title: <small>{{topic.name}}</small>
+				</h3>
+				<br>
+				<h4>
+					Isue: <small>{{topic.description}}</small>
+				</h4>
+			</div>
 		</div>
 	</div>
-	<button class="btn btn-md btn-outline-primary float-right"
-		(click)="open(undefined)">Post a reply!!</button>
-	<h2>Answers</h2>
-
-	<div *ngIf="posts?.length > 0">
+	<button class="btn btn-md btn-outline-primary float-right" *ngIf="auth.isLoggedIn()"
+		style="position: relative; z-index: 1" (click)="open(undefined)">Post
+		a reply!!</button>
+	<div class="m-3" *ngIf="posts?.length > 0">
+		<h3>Answers</h3>
+		<div class="row border border-dark"></div>
 		<div class="post" *ngFor="let post of posts">
-			<div class="row">
-				<div class="col-sm-3 user-data">
+			<br>
+			<div class="row ">
+				<div
+					class="col-xl-3 user-data border border-dark border-top-0 border-bottom-0 border-left-0 ">
 					<p>Inserted By: {{post.user.userName}}
-					<p>Insert Date : {{post.insertDate | date: 'dd/MM/yyyy-hh:mm'}}
-					<p *ngIf="post.updateDate">Update Date : {{post.updateDate | date: 'dd/MM/yyyy-hh:mm'}}
+					<p>Insert Date : {{post.insertDate | date: 'yyyy-MM-dd HH:mm'}}
+					
+					<p *ngIf="post.updateDate">Update Date : {{post.updateDate |
+						date: 'yyyy-MM-dd HH:mm'}}
+					<div *ngIf="post.isCorrect && myTopic()"
+						(click)="unmarkAsAnswer(post)" class="icon-lg check-box pointer"></div>
+					<div *ngIf="!post.isCorrect && myTopic()"
+						(click)="markAsAnswer(post)"
+						class="icon-lg check-box-empty pointer"></div>
+					<div *ngIf="post.isCorrect && !myTopic()" class="icon-lg check-box"></div>
+
 				</div>
-				<div class="col-sm-9 post-data">
-					<a [routerLink]="['topic/', topic.id]" routerLinkActive="active">
-						<p>Comment: {{post.comment}}</p>
-						<p>Solution: {{post.solution}}</p>
-						<p>Is correct: {{post.isCorrect ? 'Yes' : 'No'}}</p>
-					</a>
-					<button class="btn btn-md btn-outline-primary float-right"
-						(click)="open(post)">Update</button>
+				<div class="col-xl-9">
+					<h3>Solution:</h3>
+					<pre>
+						<code highlight [code]="post.solution"></code>
+					</pre>
+					<div class="row">
+						<div class="col-11">
+							<p>Comment: {{post.comment}}</p>
+						</div>
+						<div class="col-1 mt-3" *ngIf="this.auth.isAdmin() || myPost(post)" >
+							<div class="icon eraser"  (click)="delete(post.id)"></div>
+							<div class="icon pencil mt-2" (click)="open(post)"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<br>
+			<div class="row border border-dark mr-5 ml-5"></div>
 		</div>
-
-		<button></button>
-
-
 	</div>
+</div>

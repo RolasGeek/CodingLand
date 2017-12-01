@@ -18,7 +18,7 @@ public class ResponseCreatorImpl implements ResponseCreator{
 		}
 		
 		public Response ResponseDelete(Boolean success) {
-			return Response.status(success ? Status.OK: Status.NOT_FOUND).build();
+			return Response.status(success ? Status.NO_CONTENT: Status.NOT_FOUND).build();
 		}
 		
 		public Response ResponseGet(Object object) {

@@ -14,7 +14,8 @@ export class MenuBarComponent implements OnInit {
   constructor(public auth : AuthService) { }
 
   ngOnInit() {
-      this.auth.refnesh(); //Load user data after f5
+      this.auth.refreshToken(); //Load user data after f5
+
   }
   
 

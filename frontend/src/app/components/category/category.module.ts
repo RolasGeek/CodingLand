@@ -15,12 +15,15 @@ import { TopicComponent } from './../topic/topic.component';
 //Modal
 import { PostModalComponent } from './../topic/post-modal/post-modal.component';
 import { TopicModalComponent } from './../topic/topic-modal/topic-modal.component';
+import { InfoModalComponent } from './../info-modal/info-modal.component';
 
 import { CategoryRoutingModule } from './category-routing.module';
+import { HighlightModule } from 'ngx-highlightjs';
 
 @NgModule({
     imports: [     
       BrowserModule,
+      HighlightModule.forRoot({ theme: 'hopscotch'}),
       CategoryRoutingModule,
       NgbModule
     ],
@@ -29,6 +32,6 @@ import { CategoryRoutingModule } from './category-routing.module';
           TopicComponent
     ],
     providers: [TopicService, PostService],
-    entryComponents: [PostModalComponent, TopicModalComponent]
+    entryComponents: [PostModalComponent, TopicModalComponent, InfoModalComponent]
   })
   export class CategoryModule { } 

@@ -21,10 +21,7 @@ public class SecurityContextImpl implements SecurityContext{
 
 	@Override
 	public boolean isUserInRole(String role) {
-		if (user.getRole() != null) {
             return role.equals(user.getRole().getObjectCode());
-        }
-        return false;
 	}
 
 	@Override

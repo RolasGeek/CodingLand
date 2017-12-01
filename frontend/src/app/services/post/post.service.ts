@@ -26,7 +26,7 @@ export class PostService {
      return  this.http.put(url, data);
   }
   
-  dalete(id) {
+  delete(id) {
       return this.http.delete(url+ id);
   }
 }

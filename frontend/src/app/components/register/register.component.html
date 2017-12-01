@@ -1,64 +1,77 @@
 <div>
-<div ><p *ngIf="auth.error" >Nepaejo
-</p>
-</div>
-<div ><p *ngIf="auth.success" >Paejo
-</p>
-</div>
-	<h2>Register</h2>
-	<form [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
-		<!-- username -->
-		<div class="form-group">
-			<label for="i_username">Username</label> 
-			<input type="text" id="i_username" placeholder="Username" formControlName="userName" class="form-control">
-			<div *ngIf="userName.invalid && (userName.dirty || userName.touched)"
-				class="alert alert-danger">
-				<div *ngIf="userName.errors.required">Username is required.</div>
+	<div>
+		<p *ngIf="auth.error">Nepaejo</p>
+	</div>
+	<div>
+		<p *ngIf="auth.success">Paejo</p>
+	</div>
+		<h2>Register</h2>
+		<form [formGroup]="registerForm"
+			(ngSubmit)="register(registerForm.value)">
+			<!-- username -->
+			<div class="form-group">
+				<label for="i_username">Username</label> <input type="text"
+					id="i_username" placeholder="Username" formControlName="userName"
+					class="form-control">
+				<div
+					*ngIf="userName.invalid && (userName.dirty || userName.touched)"
+					class="alert alert-danger">
+					<div *ngIf="userName.errors.required">Username is required.</div>
+				</div>
 			</div>
-		</div>
-		
-		
-		<!-- email -->
-		<div class="form-group">
-			<label for="i_email">Email</label> 
-			<input type="text" id="i_email" placeholder="Email" formControlName="email" class="form-control">
-			<div *ngIf="email.invalid && (email.dirty || email.touched)"
-				class="alert alert-danger">
-				<div *ngIf="email.errors.required">Email is required.</div>
-			</div>
-		</div>
-		<!-- password -->
-		<div class="form-group">
-			<label for="i_password">Password</label> 
-			<input type="text" id="i_password" placeholder="Password" formControlName="password" class="form-control">
-			<div *ngIf="password.invalid && (password.dirty || password.touched)"
-				class="alert alert-danger">
-				<div *ngIf="password.errors.required">Password is required.</div>
-			</div>
-		</div>
-		<!-- password -->
-		<div class="form-group">
-			<label for="i_password">Repeat Password</label> 
-			<input type="text" id="i_rpassword" placeholder="Repeat password" formControlName="rpassword" class="form-control">
-			<div *ngIf="rpassword.invalid && (rpassword.dirty || rpassword.touched)"
-				class="alert alert-danger">
-				<div *ngIf="rpassword.errors.required">Repeat password is required.</div>
-				 <div [hidden]="!rpassword.hasError('mismatchedPassword')">The passwords must match</div>
-			</div>
-		</div>
-		
-		<!-- password -->
-		<div class="form-group">
-			<label for="i_firstName">FirstName</label> 
-			<input type="text" id="i_firstName" placeholder="First Name" formControlName="firstName" class="form-control">
-		</div>
-		
-		<!-- password -->
-		<div class="form-group">
-			<label for="i_lastName">Last Name</label> 
-			<input type="text" id="i_lastName" placeholder="Last Name" formControlName="lastName" class="form-control">
-		</div>
 
-		<button type="submit" class="btn btn-default">Submit</button>
-	</form>
+
+			<!-- email -->
+			<div class="form-group">
+				<label for="i_email">Email</label> <input type="text" id="i_email"
+					placeholder="Email" formControlName="email" class="form-control">
+				<div *ngIf="email.invalid && (email.dirty || email.touched)"
+					class="alert alert-danger">
+					<div *ngIf="email.errors.required">Email is required.</div>
+				</div>
+			</div>
+			<!-- password -->
+			<div class="form-group">
+				<label for="i_password">Password</label> <input type="text"
+					id="i_password" placeholder="Password" formControlName="password"
+					class="form-control">
+				<div
+					*ngIf="password.invalid && (password.dirty || password.touched)"
+					class="alert alert-danger">
+					<div *ngIf="password.errors.required">Password is required.</div>
+				</div>
+			</div>
+			<!-- password -->
+			<div class="form-group">
+				<label for="i_password">Repeat Password</label> <input type="text"
+					id="i_rpassword" placeholder="Repeat password"
+					formControlName="rpassword" class="form-control">
+				<div
+					*ngIf="rpassword.invalid && (rpassword.dirty || rpassword.touched)"
+					class="alert alert-danger">
+					<div *ngIf="rpassword.errors.required">Repeat password is
+						required.</div>
+					<div [hidden]="!rpassword.hasError('mismatchedPassword')">The
+						passwords must match</div>
+				</div>
+			</div>
+
+			<!-- password -->
+			<div class="form-group">
+				<label for="i_firstName">FirstName</label> <input type="text"
+					id="i_firstName" placeholder="First Name"
+					formControlName="firstName" class="form-control">
+			</div>
+
+			<!-- password -->
+			<div class="form-group">
+				<label for="i_lastName">Last Name</label> <input type="text"
+					id="i_lastName" placeholder="Last Name" formControlName="lastName"
+					class="form-control">
+			</div>
+
+			<button type="submit"
+				class="btn btn-md btn-outline-primary float-middle">Submit</button>
+		</form>
+	<br>
 </div>

@@ -32,7 +32,7 @@ export class PostModalComponent implements OnInit {
     createForm() {
         this.postForm = this.fb.group( {
             id: 0,
-            comment: ['', Validators.required],
+            comment: [''],
             solution: ['', Validators.required],
             userId: [''],
             topicId: ['']

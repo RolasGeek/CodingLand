@@ -2,18 +2,9 @@ package com.rolas.studies.entities;
 
 import java.io.Serializable;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.rolas.studies.dao.category.CategoryDao;
-import com.rolas.studies.dao.topic.TopicDao;
-
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +56,8 @@ public class Topic implements Serializable {
 	
 	@Column(name="post_count")
 	private Integer postCount;
-
+ 
+	
 	public Topic() {
 	}
 
@@ -115,35 +107,11 @@ public class Topic implements Serializable {
 		this.description = description;
 	}
 	
-	public Category getCategory() {
-		return this.category;
-	}
 
 	public void setCategory(Category category) {
 		this.category = category;
 	}
 
-	public List<Post> getPosts() {
-		return this.posts;
-	}
-
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
-
-	public Post addPost(Post post) {
-		getPosts().add(post);
-		post.setTopic(this);
-
-		return post;
-	}
-
-	public Post removePost(Post post) {
-		getPosts().remove(post);
-		post.setTopic(null);
-
-		return post;
-	}
 	
 	public User getUser() {
 		return this.user;
@@ -165,9 +133,6 @@ public class Topic implements Serializable {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
 
 	public Integer getPostCount() {
 		return postCount;
@@ -175,6 +140,10 @@ public class Topic implements Serializable {
 
 	public void setPostCount(Integer postCount) {
 		this.postCount = postCount;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }

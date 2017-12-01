@@ -3,10 +3,13 @@ package com.rolas.studies.dao;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import com.rolas.studies.util.LogicLogger;
+
 public class BaseDao<T> {
 	@Inject
 	public EntityManager em;
-
+	
+	private LogicLogger log =  LogicLogger.getLogger(getClass());
 	public Object persist(Object o) {
 		try {
 			em.getTransaction().begin();
@@ -27,18 +30,14 @@ public class BaseDao<T> {
 			em.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();// FIXME sukurti logery
+			log.error("UPDATE FAILED FOR CLASS" + getClass().getName(), e);
 			return false;
 		}
 	}
 
 	public Object get(Integer id, Class<T> type) {
 		if (id != null) {
-			try {
 				return em.find(type, id);
-			} catch (Exception e) {
-				e.printStackTrace();// TODO: handle exception
-			}
 		}
 		return null;
 	}

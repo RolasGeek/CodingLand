@@ -4,7 +4,6 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-
 import javax.inject.Inject;
 
 import io.jsonwebtoken.Claims;
@@ -18,8 +17,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtilsImpl  implements JwtTokenUtils{
 	
 	@Inject KeyGeneratorUtils keyGenerator;
-
 	
+	private  LogicLogger log = LogicLogger.getLogger(this.getClass());
+
+	public JwtTokenUtilsImpl() {
+	
+	}
+	
+	
+	public JwtTokenUtilsImpl(KeyGeneratorUtils keyGenerator) {
+		this.keyGenerator = keyGenerator;
+	}
+
 	static final String TOKEN_KEY = "DFw88fwef$f4few";
 	
 	static final String R_TOKEN_KEY = "gew#567cfe$f4few";
@@ -40,11 +49,21 @@ public class JwtTokenUtilsImpl  implements JwtTokenUtils{
 	}
 	
 	public Claims validate(String token) {
+		try {
 		return Jwts.parser().setSigningKey(keyGenerator.generateKey(TOKEN_KEY)).parseClaimsJws(token).getBody();
+		} catch (Exception e) {
+			log.debug("JWT token is invalid", e);
+			return null;
+		}
 	}
 	
 	public Claims validateRefresh(String token) {
+		try {
 		return Jwts.parser().setSigningKey(keyGenerator.generateKey(R_TOKEN_KEY)).parseClaimsJws(token).getBody();
+		} catch (Exception e) {
+			log.debug("JWT token is invalid", e);
+			return null; 
+		}
 	}
 	
 }

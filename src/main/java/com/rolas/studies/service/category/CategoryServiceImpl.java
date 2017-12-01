@@ -19,16 +19,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category insert(Category c) {
+		if (c == null) return null;
 		return categoryDao.persist(c);
 	}
 
 
 	@Override
 	public boolean update(Category c) {
-		if(c.getId() != null) { 
-			return  categoryDao.update(c);
-		} 
-		return false;
+		if(c.getId() == null) return false; 
+		return  categoryDao.update(c);
 	}
 
 
@@ -37,5 +36,10 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryDao.delete(id);
 	}
 	
+	
+	@Override
+	public Category get(Integer id) {
+		return categoryDao.get(id);
+	}
 
 }

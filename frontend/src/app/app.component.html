@@ -1,13 +1,19 @@
-<!--The content below is only a placeholder and can be replaced.-->
 
 
 <app-menu-bar></app-menu-bar>
 
-<ng-progress [showSpinner]="false"></ng-progress>
-
-<div style="text-align: center">
-
-	<router-outlet></router-outlet>
+<ng-progress [showSpinner]="false"  [color]="'yellow'"></ng-progress>
+<div class="float-left mt-2"><img src="assets/ads.png" class="img-fluid  add"></div>
+<div class="float-right text-right mt-2"><img src="assets/ads.png" class="img-fluid  add"></div>
+<div  class="mt-2 container bg-container rounded" >
+	<br>
+	<div style="background-color: white">
 
 </div>
+	<router-outlet></router-outlet>
+	
+</div>
+<br>
+
+
 

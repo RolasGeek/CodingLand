@@ -1,27 +1,61 @@
 
 <div>
 	<button class="btn btn-lg btn-outline-primary float-right"
-		(click)="open(undefined)">Create</button>
-	<div class="container">
-		<div class="topic" *ngFor="let topic of topics">
+		*ngIf="auth.isLoggedIn()" (click)="open(undefined)">Create</button>
+	<h2>Topics</h2>
+	<br>
+	<div>
+		<div class="topic " *ngFor="let topic of topics; let i = index"
+			[attr.data-index]="i">
 			<div class="row">
-				<div class="col-md-3 user-data">
-					<p>Inserted By: {{topic.user.userName}}
-					<p>
-					<p>Insert Date : {{topic.insertDate | date:
-						'dd/MM/yyyy-hh:mm'}}
-					<p>
+				<div
+					class="col-xl-1 border border-right-0 border-left-0 border-dark">
+					<h3 class="text-right mt-4">{{i+1}}.</h3>
 				</div>
-				<div class="col-md-9 post-data">
-					<a [routerLink]="['topic/', topic.id]" routerLinkActive="active">
-						<p>Name: {{topic.name}}</p>
-						<p>Description: {{topic.description}}</p>
-					</a>
+				<div class="col-xl-3 border border-dark">
+					<div class="m-3">
+						By: {{topic.user.userName}}<br> <img
+							src="assets/profilepic.png" class="prof-pic-small">
+					</div>
+				</div>
+				<div
+					class="col-xl-8 border border-right-0 border-left-0 border-dark">
+					<div class="row">
+						<div class="col-11">
+							<a [routerLink]="['topic/', topic.id]">
+								<div class="m-2">
+									<p>Name: {{topic.name}}</p>
+									<p>Description: {{topic.description}}</p>
+								</div>
+							</a>
+						</div>
+						<div class="col-1 mt-3" *ngIf="auth.isAdmin() || myTopic(topic)">
+							<div class="icon eraser" (click)="delete(topic.id)"></div>
+							<div class="icon pencil mt-2" (click)="open(topic)"></div>
+
+						</div>
+
+					</div>
 				</div>
 			</div>
-			<button class="btn" (click)="delete(topic.id)">Delete</button>
-			<button class="btn btn-md btn-outline-primary float-left"
-				(click)="open(topic)">Update</button>
+			<div class="row mt-3 text-center">
+				<div class="col">
+					<p>Insert Date : {{topic.insertDate | date:
+						'dd/MM/yyyy-hh:mm'}}
+				</div>
+				<div class="col">
+					<p>Update Date : {{topic.updateDate | date:
+						'dd/MM/yyyy-hh:mm'}}
+				</div>
+				<div class="col">
+				<div class="row" >
+					<p>Posts count : {{topic.postCount}}
+					<div  *ngIf="topic.answered" class="icon-lg check-box ml-2"></div>
+					<div  *ngIf="!topic.answered" class="icon-lg check-box-empty ml-2"></div>
+				</div>
+				</div>
+			</div>
+			<div class="row border border-dark"></div>
 		</div>
 	</div>
 </div>

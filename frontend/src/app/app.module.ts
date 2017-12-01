@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 //Custom Module
 import { CategoryModule } from './components/category/category.module';
@@ -20,7 +21,7 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import { TopicModalComponent } from './components/topic/topic-modal/topic-modal.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PostModalComponent } from './components/topic/post-modal/post-modal.component';
-
+import { InfoModalComponent } from './components/info-modal/info-modal.component';
 
 //Service
 import { CategoryService } from './services/category/category.service';
@@ -28,15 +29,12 @@ import { AuthService } from './services/auth/auth.service';
 
 // Http interceptor
 import { TokenInterceptor } from './utils/token.interceptor';
-
-
-
-
-
+import { ProfileComponent } from './components/profile/profile.component';
 
 const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
+    { path: 'register', component: RegisterComponent  },
+    { path: 'profile', component: ProfileComponent },
     {  path: '', component: MainPageComponent }
 ];
 
@@ -49,21 +47,25 @@ const appRoutes: Routes = [
         MainPageComponent,
         TopicModalComponent,
         RegisterComponent,
-        PostModalComponent
+        PostModalComponent,
+        ProfileComponent,
+        InfoModalComponent
 
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         NgbModule.forRoot(),
         RouterModule.forRoot(
-            appRoutes,
+            appRoutes, {   useHash: true },
             //{ enableTracing: true } // <-- debugging purposes only
         ),
         HttpClientModule,
         NgProgressModule,
-        CategoryModule
+        CategoryModule,
+        
     ],
     providers: [
         {
