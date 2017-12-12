@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Topic } from './../../classes/topic';
+import { Category } from './../../classes/category';
 import { TopicService } from './../../services/topic/topic.service';
 import { CategoryService } from './../../services/category/category.service';
 import { MatTableModule } from '@angular/material';
@@ -21,13 +22,15 @@ export class CategoryComponent implements OnInit {
   topics : Array<Topic>
   deleted : boolean; 
   categoryId : number;
-  constructor(public topicService : TopicService, private route : ActivatedRoute, private modalService :NgbModal, public auth : AuthService ) { }
+  category: Category;
+  constructor(public topicService : TopicService, private route : ActivatedRoute, private modalService :NgbModal, public auth : AuthService, public categoryService : CategoryService ) { }
 
   ngOnInit() {
       this.route.params.subscribe( params => {
           this.categoryId = +params['category_id'];
       });
-      this.topicService.getAll(this.categoryId).subscribe((data : Array<Topic>)=> {this.topics = data;console.log(data);} )
+      this.topicService.getAll(this.categoryId).subscribe((data : Array<Topic>)=> {this.topics = data;console.log(data);} );
+      this.categoryService.get(this.categoryId).subscribe((data : Category) => {this.category = data;});
    
   }
   

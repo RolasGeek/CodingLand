@@ -10,7 +10,7 @@ const url = 'api/auth/'
 export class AuthService {
     user: User;
     error: boolean;
-    success: boolean;
+    registerStatus: number;
     constructor( private http: HttpClient, private router: Router ) {
     }
 
@@ -46,7 +46,7 @@ export class AuthService {
 
 
     register( user ) {
-        return this.http.post( url, user ).subscribe((data:any) => { this.success = data == 1; this.error = data == 2; });
+        return this.http.post( url, user ).subscribe((data:any) => { this.registerStatus = data;});
     }
 
     public get( username ) {
@@ -58,13 +58,15 @@ export class AuthService {
     }
     
     public refreshToken() {
-        return this.http.get( url + 'refresh').subscribe(( data: any ) => {
-            if ( data ) {
-                localStorage.setItem( 'token', data.token );
-                localStorage.setItem( 'refresh_token', data.refresh_token);
-                this.refnesh();
-            }
-        });
+        if(this.isLoggedIn()) {
+            return this.http.get( url + 'refresh').subscribe(( data: any ) => {
+                if ( data ) {
+                    localStorage.setItem( 'token', data.token );
+                    localStorage.setItem( 'refresh_token', data.refresh_token);
+                    this.refnesh();
+                }
+            });
+        }
     }
     
     public put(data) {
@@ -84,6 +86,10 @@ export class AuthService {
         if(this.isLoggedIn() && this.user) {
             return this.user.role.objectCode == 'ADMIN';
         }
+    }
+    
+    get rStatus() {
+        return this.registerStatus;
     }
 
 }

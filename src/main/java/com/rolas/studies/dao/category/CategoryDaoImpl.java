@@ -5,13 +5,14 @@ import java.util.List;
 
 import com.rolas.studies.dao.BaseDao;
 import com.rolas.studies.entities.Category;
+import com.rolas.studies.views.CategoryVW;
 
 public class CategoryDaoImpl extends BaseDao<Category> implements CategoryDao {
 	
 	
 	@Override
-	public List<Category> getAll() {
-		return em.createNamedQuery("Category.findAll", Category.class).getResultList();
+	public List<CategoryVW> getAll() {
+		return em.createNamedQuery("CategoryVW.findAll", CategoryVW.class).getResultList();
 	}
 
 	@Override

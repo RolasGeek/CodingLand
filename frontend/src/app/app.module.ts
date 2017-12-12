@@ -9,7 +9,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 //Custom Module
 import { CategoryModule } from './components/category/category.module';
 
@@ -22,6 +21,7 @@ import { TopicModalComponent } from './components/topic/topic-modal/topic-modal.
 import { RegisterComponent } from './components/register/register.component';
 import { PostModalComponent } from './components/topic/post-modal/post-modal.component';
 import { InfoModalComponent } from './components/info-modal/info-modal.component';
+import { CategoryModalComponent } from './components/category/category-modal/category-modal.component';
 
 //Service
 import { CategoryService } from './services/category/category.service';
@@ -49,8 +49,8 @@ const appRoutes: Routes = [
         RegisterComponent,
         PostModalComponent,
         ProfileComponent,
-        InfoModalComponent
-
+        InfoModalComponent,
+        CategoryModalComponent
     ],
     imports: [
         BrowserModule,

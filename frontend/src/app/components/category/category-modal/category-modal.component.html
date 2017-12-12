@@ -1,0 +1,47 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{!category? 'Create new category' : 'Update
+		category'}}!</h4>
+
+	<button type="button" class="close" aria-label="Close"
+		(click)="activeModal.dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<form [formGroup]="categoryForm" (ngSubmit)="save(categoryForm.value)">
+		<div class="form-group">
+			<label for="i_name">Name</label> <input type="text" id="i_name"
+				placeholder="Name" formControlName="name" class="form-control">
+			<div *ngIf="name.invalid && (name.dirty || name.touched)"
+				class="alert alert-danger">
+				<div *ngIf="name.errors.required">Name is required.</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="i_description">Description</label> <input type="text"
+				id="i_description" placeholder="Description"
+				formControlName="description" class="form-control">
+			<div
+				*ngIf="description.invalid && (description.dirty || description.touched)"
+				class="alert alert-danger">
+				<div *ngIf="description.errors.required">Description is
+					required.</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="i_object_code">Object code</label> <input type="text"
+				id="i_object_code" placeholder="Object code"
+				formControlName="objectCode" class="form-control">
+			<div
+				*ngIf="objectCode.invalid && (objectCode.dirty || objectCode.touched)"
+				class="alert alert-danger">
+				<div *ngIf="objectCode.errors.required">Object code is
+					required.</div>
+			</div>
+		</div>
+
+		<button type="submit" class="btn btn-outline-dark">Submit</button>
+		<button type="button" class="btn btn-outline-dark"
+			(click)="activeModal.close('Close click')">Close</button>
+	</form>
+</div>

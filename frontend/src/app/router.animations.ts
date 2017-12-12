@@ -6,9 +6,9 @@ export function routerTransition() {
 
 
 
-function slideToTop() {
+export function slideToTop() {
   return trigger('routerTransition', [
-    state('void', style({position:'fixed', width:'74%', height:'100%'}) ),
+    state('void', style({position:'fixed', width:'78%', height:'100%'}) ),
     state('*', style({position:'relative', width:'100%', height:'100%'}) ),
     transition(':enter', [
       style({transform: 'translateY(100%)'}),

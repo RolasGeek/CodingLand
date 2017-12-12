@@ -6,13 +6,14 @@ import javax.inject.Inject;
 
 import com.rolas.studies.dao.category.CategoryDao;
 import com.rolas.studies.entities.Category;
+import com.rolas.studies.views.CategoryVW;
 
 public class CategoryServiceImpl implements CategoryService {
 	
 	@Inject CategoryDao categoryDao;
 	
 	
-	public List<Category> getAll() {
+	public List<CategoryVW> getAll() {
 		return categoryDao.getAll();
 	}
 

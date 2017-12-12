@@ -1,8 +1,12 @@
-
 <div>
+	
 	<button class="btn btn-lg btn-outline-primary float-right"
 		*ngIf="auth.isLoggedIn()" (click)="open(undefined)">Create</button>
-	<h2>Topics</h2>
+	<div class="row"><button class="btn btn-lg ml-2 mr-2  btn-outline-primary"
+	 [routerLink]="['']">Back</button>
+	 
+	<h2 *ngIf="category"> All Topics for category: {{category.name}}</h2>
+	</div>
 	<br>
 	<div>
 		<div class="topic " *ngFor="let topic of topics; let i = index"
@@ -14,24 +18,25 @@
 				</div>
 				<div class="col-xl-3 border border-dark">
 					<div class="m-3">
-						By: {{topic.user.userName}}<br> <img
-							src="assets/profilepic.png" class="prof-pic-small">
+						<p><a  [routerLink]="['/profile/']" [queryParams]="{ user: topic.user.userName }" *ngIf="auth.isLoggedIn()" >By: {{topic.user.userName}} </a></p>
+						<p *ngIf="!auth.isLoggedIn()" >By: {{topic.user.userName}} </p>
+						 <img src="assets/profilepic.png" class="prof-pic-small border border-dark">
 					</div>
 				</div>
 				<div
-					class="col-xl-8 border border-right-0 border-left-0 border-dark">
+					class="col-xl-8 border border-right-0 border-left-0 border-dark" >
 					<div class="row">
-						<div class="col-11">
+						<div class="col-11" >
 							<a [routerLink]="['topic/', topic.id]">
 								<div class="m-2">
-									<p>Name: {{topic.name}}</p>
-									<p>Description: {{topic.description}}</p>
+									<h2>{{topic.name}}</h2>
+									<span>{{topic.description}}</span>
 								</div>
 							</a>
 						</div>
 						<div class="col-1 mt-3" *ngIf="auth.isAdmin() || myTopic(topic)">
-							<div class="icon eraser" (click)="delete(topic.id)"></div>
-							<div class="icon pencil mt-2" (click)="open(topic)"></div>
+							<div class="icon eraser" (click)="delete(topic.id)" placement="top" ngbTooltip="Delete"></div>
+							<div class="icon pencil mt-2" (click)="open(topic)" placement="top" ngbTooltip="Edit"></div>
 
 						</div>
 
@@ -40,18 +45,16 @@
 			</div>
 			<div class="row mt-3 text-center">
 				<div class="col">
-					<p>Insert Date : {{topic.insertDate | date:
-						'dd/MM/yyyy-hh:mm'}}
+					<p>Insert Date : {{topic.insertDate | date: 'yyyy-MM-dd HH:mm'}}
 				</div>
 				<div class="col">
-					<p>Update Date : {{topic.updateDate | date:
-						'dd/MM/yyyy-hh:mm'}}
+					<p *ngIf="topic.updateDate" >Update Date : {{topic.updateDate | date: 'yyyy-MM-dd HH:mm'}}
 				</div>
 				<div class="col">
 				<div class="row" >
 					<p>Posts count : {{topic.postCount}}
-					<div  *ngIf="topic.answered" class="icon-lg check-box ml-2"></div>
-					<div  *ngIf="!topic.answered" class="icon-lg check-box-empty ml-2"></div>
+					<div  *ngIf="topic.answered" class="icon-lg check-box ml-2" placement="top" ngbTooltip="This topic is answered"></div>
+					<div  *ngIf="!topic.answered" class="icon-lg check-box-empty ml-2" placement="top" ngbTooltip="This topic is not answered"></div>
 				</div>
 				</div>
 			</div>

@@ -59,7 +59,7 @@ public class UserServiceImpl  implements UserService {
 		return false;
 	}
 	
-	public Boolean insertNewUser(User u) {
+	public Integer insertNewUser(User u) {
 		return userDao.insertNewUser(u);
 	}
 

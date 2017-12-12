@@ -9,7 +9,7 @@ import { AuthService } from './../../services/auth/auth.service';
 import { Topic } from './../../classes/topic';
 import { Post } from './../../classes/post';
 import { routerTransition } from './../../router.animations';
-import {PostModalComponent} from './post-modal/post-modal.component';
+import { PostModalComponent } from './post-modal/post-modal.component';
 import { InfoModalComponent } from './../info-modal/info-modal.component';
 
 @Component({
@@ -24,8 +24,9 @@ export class TopicComponent implements OnInit {
   topic : Topic;
   posts : Array<Post>;
   topicId : 0;
+  categoryId : 0;
   constructor(private topicService : TopicService, private auth : AuthService, private postService : PostService, private route : ActivatedRoute, private modalService :NgbModal) {
-      this.route.params.subscribe( params => { this.topicId = params['topic_id']});
+      this.route.params.subscribe( params => { this.topicId = params['topic_id']; this.categoryId = params['category_id']});
   }
 
   ngOnInit() {

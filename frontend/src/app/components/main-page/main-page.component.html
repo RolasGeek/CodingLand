@@ -1,35 +1,43 @@
 
 <div class="container">
+<div *ngIf="auth.isAdmin()">
+	<button class="btn btn-lg btn-outline-primary float-right"
+		 (click)="open(undefined)">Create</button>
+		<br>
+		<br>
+</div>
 	<div class="row">
-		<div *ngFor="let category of categories" class="col-lg-4">
-			 <a [routerLink]="['category/', category.id]" outerLinkActive="active" class="btn btn-sq-lg btn-primary">
-               <p  class="text-center">{{category.name}}</p><br>
-            </a>
+		<div *ngFor="let category of categories" class="col-xl-4 mt-2">
+			<div class=" btn btn-sq-lg">
+				<div [routerLink]="['category/', category.id]"
+					outerLinkActive="active">
+					<div class="col">
+						<h3>{{category.name}}</h3>
+					</div>
+					<div class="col">
+						<p>{{category.description}}</p>
+					</div>
+					<br> <br>
+					<div class="col">
+						<p>Last topic: {{category.topicName}}
+						<p>Topics: {{category.topicCount}}
+					</div>
+				</div>
+				<div class="row" *ngIf="auth.isAdmin()">
+					<div class="col-6">
+						<div class="icon eraser" (click)="delete(category.id)" placement="top" ngbTooltip="Delete"></div>
+					</div>
+					<div class="col-6">
+						<div class="icon pencil float-right" (click)="open(category)"
+							placement="top" ngbTooltip="Edit"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row"></div>
 		</div>
 	</div>
 </div>
-<ngb-carousel>
-  <ng-template ngbSlide>
-  	<div style="height: 200px"></div>
-    <div class="carousel-caption">
-      <h3>10 seconds between slides...</h3>
-      <p>This carousel uses customized default values.</p>
-    </div>
-  </ng-template>
-  <ng-template ngbSlide    >
-    	<div style="height: 200px" ></div>
-    <div class="carousel-caption">
-    
-      <h3>No keyboard...</h3>
-      <p>This carousel uses customized default values.</p>
-    </div>
-  </ng-template>
-  <ng-template ngbSlide>
-    	<div style="height: 200px"></div>
-    <div class="carousel-caption">
-      <h3>And no wrap after last slide.</h3>
-      <p>This carousel uses customized default values.</p>
-    </div>
-  </ng-template>
-</ngb-carousel>
+<br>
+
+
 

@@ -2,14 +2,19 @@
 <div *ngIf="!topic">Loading</div>
 <div *ngIf="topic">
 	<div class="m-3" >
-		<h1>Topic</h1>
+		<div class="row"><button class="btn btn-lg ml-2 mr-2 mb-2  btn-outline-primary"
+		 [routerLink]="['/category', categoryId]">Back</button>
+		 <h1>Topic</h1>
+		 </div>
+		
 		<div class="row border border-dark"></div>
 		<br>
 		<div class="row">
 			<div class="col-xl-3 ml-3">
 				<div class="float-center">
-					Author: {{topic.user.userName}}<br> <img
-						src="assets/profilepic.png" class="prof-pic-topic">
+				<p><a  [routerLink]="['/profile/']" [queryParams]="{ user: topic.user.userName }" *ngIf="auth.isLoggedIn()" placement="top" ngbTooltip="Check profile">Author: {{topic.user.userName}}</a></p>
+					<p  *ngIf="!auth.isLoggedIn()" >Author: {{topic.user.userName}}</p> <img
+						src="assets/profilepic.png" class="prof-pic-topic border border-dark">
 				</div>
 			</div>
 			<div class="col-xl-8 mt-5">
@@ -34,17 +39,17 @@
 			<div class="row ">
 				<div
 					class="col-xl-3 user-data border border-dark border-top-0 border-bottom-0 border-left-0 ">
-					<p>Inserted By: {{post.user.userName}}
+					<p><a  [routerLink]="['/profile/']" [queryParams]="{ user: post.user.userName }" *ngIf="auth.isLoggedIn()" placement="top" ngbTooltip="Check profile">By: {{post.user.userName}}</a></p>
+							<p *ngIf="!auth.isLoggedIn()">By: {{post.user.userName}}</p>
 					<p>Insert Date : {{post.insertDate | date: 'yyyy-MM-dd HH:mm'}}
-					
 					<p *ngIf="post.updateDate">Update Date : {{post.updateDate |
 						date: 'yyyy-MM-dd HH:mm'}}
 					<div *ngIf="post.isCorrect && myTopic()"
-						(click)="unmarkAsAnswer(post)" class="icon-lg check-box pointer"></div>
+						(click)="unmarkAsAnswer(post)" class="icon-lg check-box pointer" placement="top" ngbTooltip="Unmark"> </div>
 					<div *ngIf="!post.isCorrect && myTopic()"
 						(click)="markAsAnswer(post)"
-						class="icon-lg check-box-empty pointer"></div>
-					<div *ngIf="post.isCorrect && !myTopic()" class="icon-lg check-box"></div>
+						class="icon-lg check-box-empty pointer" placement="top" ngbTooltip="Mark"></div>
+					<div *ngIf="post.isCorrect && !myTopic()" class="icon-lg check-box"  placement="top" ngbTooltip="This topic is answered"></div>
 
 				</div>
 				<div class="col-xl-9">
@@ -57,14 +62,15 @@
 							<p>Comment: {{post.comment}}</p>
 						</div>
 						<div class="col-1 mt-3" *ngIf="this.auth.isAdmin() || myPost(post)" >
-							<div class="icon eraser"  (click)="delete(post.id)"></div>
-							<div class="icon pencil mt-2" (click)="open(post)"></div>
+							<div class="icon eraser"  (click)="delete(post.id)" placement="top" ngbTooltip="Delete"></div>
+							<div class="icon pencil mt-2" (click)="open(post)" placement="top" ngbTooltip="Edit"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<br>
 			<div class="row border border-dark mr-5 ml-5"></div>
+			<br>
 		</div>
 	</div>
 </div>

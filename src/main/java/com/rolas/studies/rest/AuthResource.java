@@ -65,7 +65,7 @@ public class AuthResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response register(User u ) {
-			return Response.ok(userService.insertNewUser(u) ? "1" : "2").build();
+			return Response.ok(userService.insertNewUser(u)).build();
 	}
 	
 	@Path("me") 

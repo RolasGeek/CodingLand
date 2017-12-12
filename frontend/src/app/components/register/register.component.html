@@ -1,13 +1,10 @@
-<div>
-	<div>
-		<p *ngIf="auth.error">Nepaejo</p>
-	</div>
-	<div>
-		<p *ngIf="auth.success">Paejo</p>
+<div >
+	<div *ngIf="auth.rStatus == 1" class="alert alert-success">
+		<p>User successfully registered, press "Login" to login</p>
 	</div>
 		<h2>Register</h2>
 		<form [formGroup]="registerForm"
-			(ngSubmit)="register(registerForm.value)">
+			(ngSubmit)="register(registerForm.value)" class="ml-5">
 			<!-- username -->
 			<div class="form-group">
 				<label for="i_username">Username</label> <input type="text"
@@ -17,6 +14,9 @@
 					*ngIf="userName.invalid && (userName.dirty || userName.touched)"
 					class="alert alert-danger">
 					<div *ngIf="userName.errors.required">Username is required.</div>
+				</div>
+				<div class="alert alert-danger" *ngIf="auth.rStatus == 2">
+					Username already exist
 				</div>
 			</div>
 
@@ -28,11 +28,15 @@
 				<div *ngIf="email.invalid && (email.dirty || email.touched)"
 					class="alert alert-danger">
 					<div *ngIf="email.errors.required">Email is required.</div>
+					<div *ngIf="email.errors.email">Must be a valid email</div>
+				</div>
+				<div class="alert alert-danger" *ngIf="auth.rStatus == 3">
+					Email already exist
 				</div>
 			</div>
 			<!-- password -->
 			<div class="form-group">
-				<label for="i_password">Password</label> <input type="text"
+				<label for="i_password">Password</label> <input type="password"
 					id="i_password" placeholder="Password" formControlName="password"
 					class="form-control">
 				<div
@@ -43,7 +47,7 @@
 			</div>
 			<!-- password -->
 			<div class="form-group">
-				<label for="i_password">Repeat Password</label> <input type="text"
+				<label for="i_password">Repeat Password</label> <input type="password"
 					id="i_rpassword" placeholder="Repeat password"
 					formControlName="rpassword" class="form-control">
 				<div

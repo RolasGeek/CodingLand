@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoModalComponent } from './../info-modal/info-modal.component';
 import { routerTransition } from './../../router.animations';
+import { ActivatedRoute } from '@angular/router';
 
 @Component( {
     selector: 'app-profile',
@@ -16,19 +17,27 @@ import { routerTransition } from './../../router.animations';
 export class ProfileComponent implements OnInit {
 
     user: User;
+    userName: string;
     userInfoEdit: FormGroup;
     passReset: FormGroup;
     editMode: boolean = false;
     changePassActive: boolean = false;
     passError: boolean = false;
-    constructor( public auth: AuthService, public fb: FormBuilder, public modalService: NgbModal ) { this.createForm(); }
+    constructor( public auth: AuthService, public fb: FormBuilder, public modalService: NgbModal, public route : ActivatedRoute ) { this.createForm(); 
+    }
 
     ngOnInit() {
-        this.auth.me().subscribe(( data: User ) => {
-            this.user = data;
-            this.userInfoEdit.patchValue( { email: data.email, firstName: data.firstName, lastName: data.lastName } );
-        } );
-        this.passReset.patchValue( { oldPassowrd: '', password: '', rPassword: '' } );
+        this.route.queryParams.subscribe(params => {
+            this.userName = params['user'];
+            if(this.userName) {
+                this.auth.get(this.userName).subscribe((data : User) => {this.user = data;})
+            } else {
+                this.auth.me().subscribe(( data: User ) => {
+                    this.user = data;
+                    this.userInfoEdit.patchValue( { email: data.email, firstName: data.firstName, lastName: data.lastName } );
+                } );
+            }
+          });
     }
 
     createForm() {

@@ -25,7 +25,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	}
 	
 	@Override
-	public boolean insertNewUser(User user) {
+	public Integer insertNewUser(User user) {
 		Query query = em.createNativeQuery("{call insertNewUser(?,?,?,?,?,?,?)}")           
                 .setParameter(1, user.getUserName())
                 .setParameter(2, user.getPassword())
@@ -34,7 +34,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
                 .setParameter(5, user.getEmail())
                 .setParameter(6, "USER")
                 .setParameter(7, null);
-		return ((Integer) query.getSingleResult() == 1);
+		return ((Integer) query.getSingleResult());
 	}
 
 	@Override

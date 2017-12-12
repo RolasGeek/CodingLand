@@ -16,9 +16,11 @@ import { TopicComponent } from './../topic/topic.component';
 import { PostModalComponent } from './../topic/post-modal/post-modal.component';
 import { TopicModalComponent } from './../topic/topic-modal/topic-modal.component';
 import { InfoModalComponent } from './../info-modal/info-modal.component';
+import { CategoryModalComponent } from './category-modal/category-modal.component';
 
 import { CategoryRoutingModule } from './category-routing.module';
 import { HighlightModule } from 'ngx-highlightjs';
+
 
 @NgModule({
     imports: [     
@@ -32,6 +34,6 @@ import { HighlightModule } from 'ngx-highlightjs';
           TopicComponent
     ],
     providers: [TopicService, PostService],
-    entryComponents: [PostModalComponent, TopicModalComponent, InfoModalComponent]
+    entryComponents: [PostModalComponent, TopicModalComponent, InfoModalComponent, CategoryModalComponent]
   })
   export class CategoryModule { } 

@@ -6,5 +6,6 @@ export class Category {
     objectCode : string;
     name : string;
     description : string;
-    user : User;
+    topicName : string;
+    topicCount : string;
 }

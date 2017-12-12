@@ -65,10 +65,10 @@
 						</form>
 						<button id="edit"
 							class="btn btn-md btn-outline-primary float-right"
-							[hidden]="editMode" (click)="edit()">Edit</button>
+							[hidden]="editMode" *ngIf="!userName" (click)="edit()">Edit</button>
 						<br>
 					</div>
-					<div>
+					<div *ngIf="!userName" >
 						<h4>Password change</h4>
 						<div class="row border border-dark"></div>
 						<br>
