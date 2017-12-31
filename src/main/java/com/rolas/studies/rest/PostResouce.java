@@ -24,7 +24,10 @@ import com.rolas.studies.security.Secured;
 import com.rolas.studies.service.post.PostService;
 import com.rolas.studies.util.ResponseCreator;
 
+import io.swagger.annotations.Api;
+
 @Path("post")
+@Api(value = "post")
 public class PostResouce {
 	
 	@Inject PostService postService;

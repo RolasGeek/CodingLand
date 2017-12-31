@@ -20,7 +20,10 @@ import com.rolas.studies.security.Secured;
 import com.rolas.studies.service.category.CategoryService;
 import com.rolas.studies.util.ResponseCreator;
 
+import io.swagger.annotations.Api;
+
 @Path("category")
+@Api(value = "category")
 public class CategoryResource {
 	
 	@Inject CategoryService categoryService;

@@ -24,7 +24,10 @@ import com.rolas.studies.security.Secured;
 import com.rolas.studies.service.topic.TopicService;
 import com.rolas.studies.util.ResponseCreator;
 
+import io.swagger.annotations.Api;
+
 @Path("topic")
+@Api(value = "topic")
 public class TopicsResource {
 
 	@Inject ResponseCreator responseCreator;

@@ -36,6 +36,9 @@ import com.rolas.studies.util.KeyGeneratorUtilsImpl;
 import com.rolas.studies.util.ResponseCreator;
 import com.rolas.studies.util.ResponseCreatorImpl;
 
+import io.swagger.jaxrs.listing.ApiListingResource;
+import io.swagger.jaxrs.listing.SwaggerSerializers;
+
 
 public class MyApplication extends ResourceConfig {
  
@@ -43,9 +46,11 @@ public class MyApplication extends ResourceConfig {
     	
     	
     
-         packages("com.rolas.studies.rest","com.fasterxml.jackson.jaxrs.json");
+         packages("com.rolas.studies.rest","com.fasterxml.jackson.jaxrs.json", "jersey.config.server.provider.packages");
          register(RolesAllowedDynamicFeature.class);
          register(AuthetificationFilter.class);
+         register(io.swagger.jaxrs.listing.ApiListingResource.class);
+         register(io.swagger.jaxrs.listing.SwaggerSerializers.class);
          register(new AbstractBinder() {
         	    @Override
         	    public void configure() {
